@@ -12,7 +12,8 @@
   "dependencies": {
     "better-sqlite3": "^13.0.3",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "reagraph": "^4.32.0"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.2.1",
