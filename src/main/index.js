@@ -1,10 +1,16 @@
-import { app, BrowserWindow } from 'electron';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+'use strict';
 
-function createWindow() {
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+//const __dirname = path.dirname(fileURLToPath(import.meta.url)); 
+const { registerHandlers } = require(path.join(__dirname, 'ipc', 'handler.js')) // grab registerHandlers
+const { fileURLToPath } = require('url');
+
+
+const createWindow = () => {
+
+  // create the window 
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -19,11 +25,17 @@ function createWindow() {
   if (app.isPackaged) {
     win.loadFile(path.join(__dirname, '../../dist/renderer/index.html'));
   } else {
-    win.loadURL('http://localhost:5173');
+    win.loadURL('http://localhost:5173') // Why isnt my website working on your device bro?
   }
+
 }
 
 app.whenReady().then(() => {
+ 
+  const { db } = require(path.join(__dirname, 'store', 'database.js')); // grab DB
+
+  registerHandlers(db) // register the handlers for the DB
+  
   createWindow();
 
   app.on('activate', () => {
