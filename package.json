@@ -1,4 +1,3 @@
-
 {
   "name": "socialhack",
   "version": "1.0.0",
@@ -11,7 +10,8 @@
   },
   "dependencies": {
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "reagraph": "^4.32.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.2",
@@ -21,4 +21,3 @@
     "wait-on": "^9.5.1"
   }
 }
-
