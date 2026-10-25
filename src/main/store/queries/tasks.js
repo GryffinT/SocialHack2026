@@ -53,6 +53,8 @@ const findBuddies = (score, id) => {
 
     const simScore = cosineSimilarity(score, JSON.parse(task.embedding));
 
+    if ( simScore <= .3 ) continue; // arbitrary threshold
+
     buddies.push({
       id: task.id,
       score: simScore,
