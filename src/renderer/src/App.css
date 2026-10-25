@@ -1,19 +1,28 @@
 
-.Wrapper{
-  position: relative;
-  width: 100%;
+:root {
+  font-family: monospace;
+  background-color: black;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+#root {
   height: 100vh;
-
+  width: 100vw;
 }
+
+.Wrapper{
+  padding: 0px;
+  margin: 0px;
+  height: 100vh;
+  width: 100vw;
+}
+
 .Canvas{
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
-
-
-
 
 /* reset */
 button,
@@ -23,15 +32,23 @@ input {
 }
 
 .DialogOverlay {
-	background-color: rgba(14, 8, 8, 0.841);
+	background-color: white;
+  backdrop-filter: blur(5px);
 	position: fixed;
 	inset: 0;
-	animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
+  animation: fadeIn .5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    background-color: rgba(0,0,0,0);
+  } to {
+    background-color: rgba(0,0,0,.3);
+  }
 }
 
 .DialogContent {
-	background-color: rgb(43, 44, 37) ;
+	background-color: rgba(0,0,0,.4);
 	border-radius: 6px;
 	box-shadow: rgb(8, 7, 7);
 	position: fixed;
@@ -40,10 +57,9 @@ input {
 	transform: translate(-50%, -50%);
 	width: 90vw;
 	max-width: 500px;
-	max-height: 85vh;
+	max-height: 90vh;
 	padding: 25px;
 	animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 101;
 }
 .DialogContent:focus {
 	outline: none;
@@ -52,18 +68,19 @@ input {
 .DialogTitle {
 	margin: 0;
 	font-weight: 500;
-	color: rgb(67, 0, 0);
+	color: white;
 	font-size: 17px;
 }
 
 .DialogDescription {
 	margin: 10px 0 20px;
-	color: rgb(30, 22, 22);
+	color: white;
 	font-size: 15px;
 	line-height: 1.5;
 }
 
 .Button {
+  font-family: monospace;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -74,6 +91,10 @@ input {
 	font-weight: 500;
 	height: 35px;
 	user-select: none;
+  margin-top: 0px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
 }
 .Button:focus:not(:focus-visible) {
 	outline: 0;
@@ -83,17 +104,28 @@ input {
 	outline-offset: 1px;
 }
 .Button.violet {
-	background-color: rgb(212, 194, 194);
-	color: rgb(20, 15, 15);
-	outline-color: rgb(43, 41, 41);
+	background-color: rgb(255,255,255,.8);
+	color: black;
+  border: .5px solid black;
+  transition: background-color .4s ease, transform .4s ease;
 }
 .Button.violet:hover {
-	background-color: grey;
+	background-color: rgba(255,255,255);
+  transform: scale(1.05);
 }
+
+.Button.violet:active{
+  transform: scale(1.1);
+}
+
 .Button.green {
+  font-family: monospace;
+  position: relative;
 	background-color: rgb(28, 24, 24) ;
 	color: rgb(23, 20, 20);
 	outline-color: rgb(50, 50, 50);
+  color: white;
+  background-color: black;
 }
 .Button.green:hover {
 	background-color: rgb(51, 50, 50);
@@ -108,11 +140,11 @@ input {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	color: rgb(90, 10, 10);
+	color: white;
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	background-color: rgb(93, 86, 86);
+	background-color: black;
 }
 .IconButton:hover {
 	background-color: rgb(48, 48, 48);
