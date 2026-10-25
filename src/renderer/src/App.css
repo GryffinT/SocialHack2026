@@ -210,7 +210,6 @@ input {
   display: flex;
   flex-direction: column;
   width: 25%;
-  height: 30%;
   background-color: rgba(255,255,255,.6);
   color: black;
   border-radius: 6px;
@@ -219,25 +218,38 @@ input {
 }
 
 .NodeMenuTopBar {
-
-  display: flex;
-  flex-direction: row;
-
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  width: 100%;
 }
+
 
 .NodeMenuBottomBar {
-  top: auto;
-  bottom: 0px;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  width: 100%;
 }
 
-.NodeMenu > h2 {
+.NodeMenuTitle {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.NodeMenuTitle > h2 {
 
   margin: 0px;
   padding: 0px;
   padding-bottom: 5px;
 
+}
+
+.NodeMenuTitle > svg {
+  width: 40px;
+  height: 40px;
 }
 
 .NodeMenu > p {
@@ -254,4 +266,14 @@ input {
   z-index: 100000;
   background-color: rgba(0,0,0,.2);
   backdrop-filter: blur(5px);
+}
+
+#NodeCreate {
+  margin-left: auto;
+  margin-right: 0px;
+}
+
+#NodeMode {
+  margin-left: auto;
+  margin-right: 0px;
 }
