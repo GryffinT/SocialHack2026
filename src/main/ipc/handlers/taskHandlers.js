@@ -22,6 +22,7 @@ const registerTaskHandlers = () => {
 
   })
 
+  // NOTE: TO BE IMPLEMENTED, EMPTY AS OF NOW
   ipcMain.handle('tasks:update', async (event, data) => {
   
     const updatedID = updateTask(data);

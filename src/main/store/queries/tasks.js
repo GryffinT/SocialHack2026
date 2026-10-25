@@ -7,7 +7,12 @@ const { randomUUID } = require('node:crypto');
 const { db } = require(path.join(__dirname,  '..', 'database.js'));
 const { embedText, cosineSimilarity } = require(path.join(__dirname, '..', '..', 'similarityEngine', 'embeddings.js'));
 
-// I could do disallowed fields but this is just a demo -\O/-
+
+const disallowedFields = ['id', `created_at`];
+const allowedFields = db.prepare(`PRAGMA table_info(accounts)`).all().map(col => col.name).filter(name => !(disallowedFields.includes(name)));
+
+
+// I could do disallowed fields but this is just a demo (I changed my mind) -\O/-
 
 // getTask, deleteTask, updateTask, listTasks
 
@@ -31,13 +36,18 @@ const listTasks = () => {
 
 }
 
-const findBuddies = (score) => {
+const findBuddies = (score, id) => {
 
   const tasks = listTasks();
   const buddies = [];
 
   for (const task of tasks) {
-    const buds = JSON.parse(task.buddies);
+ 
+    if ( task.id == id ) continue;
+
+    let buds;
+
+    task.buddies ? buds = JSON.parse(task.buddies) : buds = [];
 
     if (buds.length >= 3) continue;
 
@@ -56,7 +66,7 @@ const findBuddies = (score) => {
 
 const createTask = async (data) => {
 
-  if (!data || data == null) {
+  if (!(data.trim()) || data == null) {
     console.error(`[createTask] INVALID DATA ERROR`);
     return -1;
   }
@@ -71,19 +81,18 @@ const createTask = async (data) => {
 
     }
 
+    const id = randomUUID();
     const embedRes = await embedText(data.name);
     const buddiesTemp = findBuddies(embedRes);
-    console.log(buddiesTemp);
 
     // shape
-    const id = randomUUID(),
-          name = data.name,
+    const name = data.name,
           desc = data.desc ?? '', // empty string to avoid typeerror in front end
           mode = data.mode,
           importance = data.importance,
           created_at = new Date().toISOString(), // ISO: YYYY-MM-DDTHH:mm:ss.sssZ
-          buddies = JSON.stringify(buddiesTemp), // WARNING: PLACEHOLDER
-          embed = JSON.stringify(embedRes);
+          buddies = JSON.stringify(buddiesTemp) ?? '[]', // WARNING: PLACEHOLDER
+          embed = JSON.stringify(embedRes) ?? '[]';
 
     db.prepare(`
       INSERT INTO tasks (id, name, desc, mode, importance, created_at, buddies, embedding)
@@ -168,9 +177,45 @@ const deleteTask = (data) => {
   }
 };
 
+const updateTask = (data) => {
+
+  if (!data) {
+    console.error('[updateTask] MISSING PARAMATER ERROR:', data);
+    return -1;
+  }
+
+  try {
+
+    if (!data.id) {
+      console.error('[updateTask] MISSING ID ERROR:', data.id);
+      return -1;
+    }
+
+    const safeFields = Object.keys(data).filter(field => !disallowedFields.includes(field));
+    const setClause = safeFields.map(field => `${field} = ?`).join(', ');
+
+    if ( setClause.length == 0 ) {
+      console.error('[updateTask] NO FIELD ERROR:', data);
+      return -1;
+    }
+
+    const values = safeFields.map(field => data[field]);
+
+    db.prepare(`UPDATE tasks SET ${setClause} WHERE id = ?`).run(...values, data.id);
+
+    return data.id;
+
+  } catch (err) {
+    console.error('[updateTask] ERROR:', err);
+    return -1;
+  }
+
+}
+
 module.exports = {
   createTask,
   deleteTask,
   listTasks,
-  getTask
+  getTask,
+  updateTask
 };

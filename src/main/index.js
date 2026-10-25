@@ -1,5 +1,5 @@
 
-'use strict';
+'use strict'; // cleaner code pretty much
 
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
@@ -7,7 +7,7 @@ const path = require('path');
 const { registerHandlers } = require(path.join(__dirname, 'ipc', 'handler.js')) // grab registerHandlers
 const { fileURLToPath } = require('url');
 
-
+// window creation function for startup
 const createWindow = () => {
 
   // create the window 
@@ -15,10 +15,10 @@ const createWindow = () => {
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, '../preload/index.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: true
+      preload: path.join(__dirname, '../preload/index.js'), // attach preload
+      contextIsolation: true, // isolate components and stuff 
+      nodeIntegration: false, // no node communication directly
+      sandbox: true // security :)
     }
   });
 
