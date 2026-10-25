@@ -10,7 +10,7 @@ function App(){
   return(
     <div>
     <Canvas></Canvas>
-    <DialogDefault> open </DialogDefault>
+    
     </div>
   )
 

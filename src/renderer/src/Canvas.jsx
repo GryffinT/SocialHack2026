@@ -7,57 +7,50 @@ import DialogDefault from './Dialog.jsx'
 function Canvas() {
 
   /* name, desc, mode, importance */
+  const[dummyVal,setDummyVal] = useState(0);
+  const[index,setIndex] = useState(-1); /* index of backend list */
+  const[nodes,setNodes] = useState([]);
+  const[edges,setEdges] = useState([]);
 
-  const[testList,setTestList] = useState([]);
-  const[nodes,setNodes] = useState([
-    {
-      id: 'n-1',
-      label: '1'
+
+
+async function loadNodes() {
+  /*backend to reagraph nodes */
+  const tasks= await window.socialHack.task.list()
+  setNodes(tasks.map(t => ({ id: String(t.id), label: t.name })));
   
-    },
-    {
-      id: 'n-2',
-      label: '2'
-    
-    }
-  ]);
-
-  const[edges,setEdges] = useState([
-      {
-        id: '1->2',
-        source: 'n-1',
-        target: 'n-2',
-        label: 'Edge 1-2'
-      }
-    ]);
-
-
-
-async function fetchNodes() {
-  const res = await window.socialHack.task.list()
-  return res
 }
 
-async function createNode() {
+async function createNode({}) {
   await window.socialHack.task.create({})
+  
+  
 }
 
-function changeArr(name,desc,mode,importance) {
-  let temp_arr = testList;
-  temp_arr.push({"name": name , "desc": desc, "mode": mode, "importance": importance});
-  setTestList(temp_arr);
+
+async function deleteNode(id) {
+  await window.socialHack.task.delete(id)
 }
+
+async function onSubmit(name,desc){
+  await window.socialHack.task.create({ name:name, desc:desc, importance:1, mode:1 });
+  await loadNodes();
+}
+
+
 
 useEffect(() => {
-  changeArr("test","test","test","test")
-}, [changeArr]); 
+  loadNodes();
+  }
+  
+, []); 
 
 
 return(
 
   <div>
     <div className = 'Wrapper'>
-    <DialogDefault> open </DialogDefault>
+    <DialogDefault onSubmit={onSubmit}> open </DialogDefault>
     <GraphCanvas
         className = 'Canvas'
         theme={darkTheme}

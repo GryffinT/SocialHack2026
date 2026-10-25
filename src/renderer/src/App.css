@@ -95,6 +95,7 @@ input {
   position: absolute;
   top: 15px;
   left: 15px;
+  z-index: 10000;
 }
 .Button:focus:not(:focus-visible) {
 	outline: 0;
