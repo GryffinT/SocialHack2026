@@ -216,7 +216,7 @@ input {
   display: flex;
   flex-direction: column;
   width: 25%;
-  background-color: rgba(0,0,0,.8);
+  background-color: rgba(0,0,0,.1);
   color: white;
   backdrop-filter: blur(5px);
   border-radius: 6px;
@@ -232,7 +232,7 @@ input {
     background-color: rgba(0,0,0,0);
     transform: translateY(50px);
   } to {
-    background-color: rgba(0,0,0,.8);
+    background-color: rgba(0,0,0,.4);
     transform: translateY(0px);
   }
 
@@ -309,4 +309,26 @@ input {
 #NodeMode {
   margin-left: auto;
   margin-right: 0px;
+}
+
+.clearButton {
+  z-index: 100;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+
+}
+
+.Button.Clear {
+  margin-top: 50px;
+  background-color: rgba(0,0,0,.9);
+  color: white;
+  transition: background-color .5s ease, color .5s ease, transform .5s ease;
+}
+
+.Button.Clear:hover {
+  background-color: white;
+  color: black;
+  transform: scale(1.02);
 }

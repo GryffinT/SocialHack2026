@@ -22,10 +22,8 @@ async function loadNodes() {
   setNodes(tasks.map(t => ({ id: String(t.id), label: t.name })));
   
   const ids = new Set(tasks.map(t => String(t.id)));
-  console.log('ids', ids)
   const newEdges = [];
 
-  console.log('load')
 
   for (const t of tasks) {
 
@@ -37,7 +35,6 @@ async function loadNodes() {
       //console.log(b)
 
       if (ids.has(b.id)) {
-        console.log(b)
 
         newEdges.push({ id: `${t.id}-${b.id}`, source: String(t.id), target: String(b.id) });
       }
@@ -45,7 +42,6 @@ async function loadNodes() {
   }
 
   setEdges(newEdges);
-  console.log("Edge Array", edges);
 }
 
   
@@ -74,6 +70,19 @@ function closeMenu(){
   setMenuOpen(false);
 }
 
+const clearData = async () => {
+
+  const dataList = await window.socialHack.task.list();
+
+  for ( const node of dataList ) {
+
+    await window.socialHack.task.delete(node.id);  
+
+  }
+
+  loadNodes(); 
+
+}
 
 useEffect(() => {
   loadNodes();
@@ -90,6 +99,7 @@ return(
      onClose={closeMenu} />}
     <div className = 'Wrapper'>
     <DialogDefault onSubmit={onSubmit}> open </DialogDefault>
+    <button className='Button Clear' onClick={clearData} >Clear</button>
     <GraphCanvas
         className = 'Canvas'
         theme={darkTheme}
@@ -99,7 +109,6 @@ return(
         edgeArrowPosition="none" edgeInterpolation="straight"
         onNodeClick={(node) => {
           getNode(node.id);
-
         }}
         renderNode={({ size, color, opacity, id, selected }) => (
           <group>
