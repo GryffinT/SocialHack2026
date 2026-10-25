@@ -70,6 +70,8 @@ input {
 	font-weight: 500;
 	color: white;
 	font-size: 17px;
+  display: flex;
+  flex-direction: row;
 }
 
 .DialogDescription {
@@ -254,14 +256,17 @@ input {
 }
 
 .NodeMenuTitle {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
+  width: 100%;
 }
 
 .NodeMenuTitle > h2 {
 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin: 0px;
   padding: 0px;
   padding-bottom: 5px;
@@ -330,5 +335,20 @@ input {
 .Button.Clear:hover {
   background-color: white;
   color: black;
+  transform: scale(1.02);
+}
+
+.check {
+  appearance: auto;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 2px;
+  transition: transform .5s ease;
+}
+
+.check:hover {
   transform: scale(1.02);
 }

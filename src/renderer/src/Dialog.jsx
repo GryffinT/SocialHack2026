@@ -10,16 +10,26 @@ const DialogDefault = ({onSubmit}) => {
 	//console.log("DialogDefault rendered, onSubmit =", onSubmit);
 
 	const[name,setName] = useState("");
+  const[mode, setMode] = useState("");
+  const[importance, setImportance] = useState("");
 	const[desc,setDesc] = useState("");
 
 	function handleClick(){
-		if (!name.trim()) return;         
-		onSubmit(name.trim(), desc.trim());     
+    
+    if (
+      !name.trim() ||
+      !Number.isInteger(Number(importance)) ||
+      Number(importance) <= 0 ||
+      !Number.isInteger(Number(mode)) ||
+      Number(mode) < 0 ||
+      Number(mode) > 1
+    ) return;
+		
+    onSubmit(name.trim(), desc.trim(), importance, mode);
 		setName("");
 		setDesc("");
-		
-		
-
+	  setMode("");
+    setImportance("");
 	}
 
 
@@ -51,7 +61,31 @@ const DialogDefault = ({onSubmit}) => {
 					<input className="Input"
 					value={desc}
 					onChange={(e) => setDesc(e.target.value)} />
-				</fieldset>
+        </fieldset>
+        <div className='integerInputRegion'>
+          <fieldset className="Fieldset">
+            <label className="Label" htmlFor="Importance">
+              Importance
+            </label>
+            <input type='number' className="Input" min="1" step='1'
+            value={importance}
+            onChange={(e) => setImportance(e.target.value)}
+            />
+          </fieldset>
+          <fieldset className="Fieldset">
+            <label className="Label" htmlFor="Mode">
+              Mode
+            </label>
+              <select
+                className="Input"
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+              >
+                <option value="0">0</option>
+                <option value="1">1</option>
+              </select>
+          </fieldset>
+        </div>
 				<div
 					style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}
 				>

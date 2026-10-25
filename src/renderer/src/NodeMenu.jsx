@@ -4,31 +4,18 @@ import {useEffect} from 'react' ;
 
 const NodeMenu = ({task, onClose}) => {
 
- 
-
-
-  
-
-
-
-
-
-
-
-  function onExit() {
-    onClose()
-
-
+  const onExit = () => {
+    onClose();
   }
 
   return (
     <div id="NodeMenuOverlay" className="NodeMenuOverlay" onClick={(e) => { if (e.target === e.currentTarget) {onExit();}}}>
       <div className='NodeMenu'>
         <div className='NodeMenuTitle'>
-          <svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="5" cy="5" r="5" />
-          </svg>
           <h2 id='NodeName' >{task.name}</h2>
+          <label>
+            <input className='check' type="checkbox" />
+          </label>
         </div>
         <div className='NodeMenuTopBar'>
           <p id='NodeTime'>time spent {task.time}</p>

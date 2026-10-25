@@ -13,94 +13,87 @@ function Canvas() {
   const[edges,setEdges] = useState([]);
   const[menuOpen,setMenuOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  
+
+  async function loadNodes() {
+    /*backend to reagraph nodes */
+    const tasks= await window.socialHack.task.list()
+    setNodes(tasks.map(t => ({ id: String(t.id), label: t.name, importance: t.importance })));
+ 
+    const ids = new Set(tasks.map(t => String(t.id)));
+    const newEdges = [];
 
 
-async function loadNodes() {
-  /*backend to reagraph nodes */
-  const tasks= await window.socialHack.task.list()
-  setNodes(tasks.map(t => ({ id: String(t.id), label: t.name })));
-  
-  const ids = new Set(tasks.map(t => String(t.id)));
-  const newEdges = [];
+    for (const t of tasks) {
 
+      //console.log(t);
 
-  for (const t of tasks) {
+      const buddies = JSON.parse(t.buddies);
 
-    //console.log(t);
+      for (const b of buddies) {
+        //console.log(b)
 
-    const buddies = JSON.parse(t.buddies);
+        if (ids.has(b.id)) {
 
-    for (const b of buddies) {
-      //console.log(b)
-
-      if (ids.has(b.id)) {
-
-        newEdges.push({ id: `${t.id}-${b.id}`, source: String(t.id), target: String(b.id) });
+          newEdges.push({ id: `${t.id}-${b.id}`, source: String(t.id), target: String(b.id) });
+        }
       }
     }
+
+    setEdges(newEdges);
   }
 
-  setEdges(newEdges);
-}
+  async function getNode(id) {
+    const task = await window.socialHack.task.get(id);
+    console.log(task);
+    setMenuOpen(true);
+    setSelectedTask(task);
+  }
 
-  
-  
+  async function deleteNode(id) {
+    await window.socialHack.task.delete(id)
+    //unused
+  }
 
+  async function onSubmit(name,desc, importance, mode){
+    await window.socialHack.task.create({ name:name, desc:desc, importance:importance, mode:mode });
+    await loadNodes();
+  }
 
-async function getNode(id) {
-  const task = await window.socialHack.task.get(id);
-  console.log(task);
-  setMenuOpen(true);
-  setSelectedTask(task);
-}
+  function closeMenu(){
+    setMenuOpen(false);
+  }
 
+  const clearData = async () => {
 
-async function deleteNode(id) {
-  await window.socialHack.task.delete(id)
-  //unused
-}
+    const dataList = await window.socialHack.task.list();
 
-async function onSubmit(name,desc){
-  await window.socialHack.task.create({ name:name, desc:desc, importance:1, mode:1 });
-  await loadNodes();
-}
+    for ( const node of dataList ) {
 
-function closeMenu(){
-  setMenuOpen(false);
-}
+      await window.socialHack.task.delete(node.id);  
 
-const clearData = async () => {
+    }
 
-  const dataList = await window.socialHack.task.list();
-
-  for ( const node of dataList ) {
-
-    await window.socialHack.task.delete(node.id);  
+    loadNodes(); 
 
   }
 
-  loadNodes(); 
-
-}
-
-useEffect(() => {
-  loadNodes();
-  }
-  
-, []); 
+  useEffect(() => {
+    loadNodes();
+    }
+ 
+  , []); 
 
 
-return(
+  return(
 
-  <div>
-    {menuOpen && <NodeMenu
-      task={selectedTask}
-     onClose={closeMenu} />}
-    <div className = 'Wrapper'>
-    <DialogDefault onSubmit={onSubmit}> open </DialogDefault>
-    <button className='Button Clear' onClick={clearData} >Clear</button>
-    <GraphCanvas
+    <div>
+      {menuOpen && <NodeMenu
+        task={selectedTask}
+      onClose={closeMenu} />}
+      <div className = 'Wrapper'>
+      <DialogDefault onSubmit={onSubmit}> open </DialogDefault>
+      <button className='Button Clear' onClick={clearData} >Clear</button>
+      <GraphCanvas
         className = 'Canvas'
         theme={darkTheme}
         nodes={nodes}
@@ -108,28 +101,34 @@ return(
         cameraMode="rotate"
         edgeArrowPosition="none" edgeInterpolation="straight"
         onNodeClick={(node) => {
-          getNode(node.id);
+        getNode(node.id);
         }}
-        renderNode={({ size, color, opacity, id, selected }) => (
-          <group>
-            <mesh>
-            <sphereGeometry attach="geometry" args={[size, 32, 32]} />
-              <meshBasicMaterial  
-                attach="material"
-                color={color}
-                opacity={opacity}
-                transparent
-              />
+        renderNode={({ size, color, opacity, id, selected }) => {
+          const node = nodes.find(n => n.id === id);
+          const importance = node?.importance ?? 1;
+          const gray = Math.round(255 * (1 - 1 / importance));
+          const fill = `rgb(${gray},${gray}, ${gray})`;
+          return (
+            <group>
+              <mesh>
+              <sphereGeometry attach="geometry" args={[size, 32, 32]} />
+                <meshBasicMaterial  
+                  attach="material"
+                  color={fill}
+                  opacity={opacity}
+                  transparent
+                />
 
-            </mesh>
-          </group>
-        )}
-      />
+              </mesh>
+            </group>
+          )
+        }}
+        />
+      </div>
     </div>
-  </div>
+  )
 
-)
- 
 
 }
+
 export default Canvas
