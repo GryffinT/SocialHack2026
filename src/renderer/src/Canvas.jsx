@@ -8,10 +8,10 @@ import NodeMenu from './comp.jsx';
 function Canvas() {
 
   /* name, desc, mode, importance */
-  const[dummyVal,setDummyVal] = useState(0);
-  const[index,setIndex] = useState(-1); /* index of backend list */
+  //
   const[nodes,setNodes] = useState([]);
   const[edges,setEdges] = useState([]);
+  
 
 
 async function loadNodes() {
@@ -21,8 +21,9 @@ async function loadNodes() {
   
 }
 
-async function createNode({}) {
-  await window.socialHack.task.create({})
+async function getNode(id) {
+  let t = await window.socialHack.task.get(id);
+  console.log(t);
   
   
 }
@@ -59,6 +60,9 @@ return(
         edges={edges}
         cameraMode="rotate"
         edgeArrowPosition="none" edgeInterpolation="curved"
+        onNodeClick={(node) => {
+          getNode(node.id);
+        }}
         renderNode={({ size, color, opacity, id, selected }) => (
           <group>
             <mesh>
