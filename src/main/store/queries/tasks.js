@@ -66,7 +66,7 @@ const findBuddies = (score, id) => {
 
 const createTask = async (data) => {
 
-  if (!(data.trim()) || data == null) {
+  if (!data || data == null) {
     console.error(`[createTask] INVALID DATA ERROR`);
     return -1;
   }
