@@ -3,7 +3,7 @@ import { GraphCanvas, darkTheme, SphereWithSvg} from 'reagraph';
 import { useState } from 'react';
 import {useEffect} from 'react' ;
 import DialogDefault from './Dialog.jsx'
-import NodeMenu from './comp.jsx';
+import NodeMenu from './NodeMenu.jsx';
 
 function Canvas() {
 
