@@ -3,6 +3,7 @@ import { GraphCanvas, darkTheme, SphereWithSvg} from 'reagraph';
 import { useState } from 'react';
 import {useEffect} from 'react' ;
 import DialogDefault from './Dialog.jsx'
+import NodeMenu from './comp.jsx';
 
 function Canvas() {
 
@@ -11,7 +12,6 @@ function Canvas() {
   const[index,setIndex] = useState(-1); /* index of backend list */
   const[nodes,setNodes] = useState([]);
   const[edges,setEdges] = useState([]);
-
 
 
 async function loadNodes() {
@@ -49,6 +49,7 @@ useEffect(() => {
 return(
 
   <div>
+    <NodeMenu></NodeMenu>
     <div className = 'Wrapper'>
     <DialogDefault onSubmit={onSubmit}> open </DialogDefault>
     <GraphCanvas

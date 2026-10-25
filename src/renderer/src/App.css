@@ -205,3 +205,53 @@ input {
 		transform: translate(-50%, -50%) scale(1);
 	}
 }
+
+.NodeMenu {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  height: 30%;
+  background-color: rgba(255,255,255,.6);
+  color: black;
+  border-radius: 6px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.NodeMenuTopBar {
+
+  display: flex;
+  flex-direction: row;
+
+}
+
+.NodeMenuBottomBar {
+  top: auto;
+  bottom: 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.NodeMenu > h2 {
+
+  margin: 0px;
+  padding: 0px;
+  padding-bottom: 5px;
+
+}
+
+.NodeMenu > p {
+
+}
+
+.NodeMenuOverlay {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position:absolute;
+  z-index: 100000;
+  background-color: rgba(0,0,0,.2);
+  backdrop-filter: blur(5px);
+}
