@@ -2,7 +2,26 @@ import './App.css';
 import { useState } from 'react';
 import {useEffect} from 'react' ;
 
-const NodeMenu = ({task, onClose}) => {
+const NodeMenu = ({task, onClose,checkBox}) => {
+
+  const [active, setActive] = useState(Boolean(task.active));
+  
+  useEffect(() => {
+    setActive(Boolean(task.active));
+  }, [task.id, task.active]);
+
+  async function handleChange(e) {
+    const checked = e.target.checked;  
+    setActive(checked);                 
+    try {
+      await checkBox(task.id, checked ? 1 : 0);
+    } catch (err) {
+      console.error(err);
+      setActive(!checked);      
+    }
+  }
+  
+ 
 
   const onExit = () => {
     onClose();
@@ -14,7 +33,10 @@ const NodeMenu = ({task, onClose}) => {
         <div className='NodeMenuTitle'>
           <h2 id='NodeName' >{task.name}</h2>
           <label>
-            <input className='check' type="checkbox" />
+            <input onChange={handleChange} 
+            checked = {active}
+            className='check' type="checkbox"
+             />
           </label>
         </div>
         <div className='NodeMenuTopBar'>

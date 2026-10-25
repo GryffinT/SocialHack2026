@@ -77,6 +77,13 @@ function Canvas() {
 
   }
 
+
+  async function checkBoxData(id,active)
+  {
+    await window.socialHack.task.update({ id, active });
+    setSelectedTask(prev => (prev && prev.id === id ? { ...prev, active } : prev));
+  }
+
   useEffect(() => {
     loadNodes();
     }
@@ -89,7 +96,7 @@ function Canvas() {
     <div>
       {menuOpen && <NodeMenu
         task={selectedTask}
-      onClose={closeMenu} />}
+      onClose={closeMenu} checkBox = {checkBoxData} />}
       <div className = 'Wrapper'>
       <DialogDefault onSubmit={onSubmit}> open </DialogDefault>
       <button className='Button Clear' onClick={clearData} >Clear</button>
