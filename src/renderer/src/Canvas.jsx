@@ -21,7 +21,36 @@ async function loadNodes() {
   const tasks= await window.socialHack.task.list()
   setNodes(tasks.map(t => ({ id: String(t.id), label: t.name })));
   
+  const ids = new Set(tasks.map(t => String(t.id)));
+  console.log('ids', ids)
+  const newEdges = [];
+
+  console.log('load')
+
+  for (const t of tasks) {
+
+    //console.log(t);
+
+    const buddies = JSON.parse(t.buddies);
+
+    for (const b of buddies) {
+      //console.log(b)
+
+      if (ids.has(b.id)) {
+        console.log(b)
+
+        newEdges.push({ id: `${t.id}-${b.id}`, source: String(t.id), target: String(b.id) });
+      }
+    }
+  }
+
+  setEdges(newEdges);
+  console.log("Edge Array", edges);
 }
+
+  
+  
+
 
 async function getNode(id) {
   const task = await window.socialHack.task.get(id);
@@ -33,6 +62,7 @@ async function getNode(id) {
 
 async function deleteNode(id) {
   await window.socialHack.task.delete(id)
+  //unused
 }
 
 async function onSubmit(name,desc){
@@ -66,7 +96,7 @@ return(
         nodes={nodes}
         edges={edges}
         cameraMode="rotate"
-        edgeArrowPosition="none" edgeInterpolation="curved"
+        edgeArrowPosition="none" edgeInterpolation="straight"
         onNodeClick={(node) => {
           getNode(node.id);
 
